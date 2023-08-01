@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Classification</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url("3.jpg");
+            background-color: #0B0B26ff;
+            color: #9C8979ff;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+        h1 {
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #drop-area {
+            border: 2px dashed #337995ff;
+            padding: 25px;
+            text-align: center;
+            background-color: #26234Dff;
+            margin-bottom: 25px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        #drop-area.dragover {
+            background-color: #28B6E3ff;
+            transform: scale(1.05);
+        }
+
+        #drop-area h2 {
+            margin-top: 0;
+        }
+
+        #result {
+            text-align: center;
+            transition: opacity 0.3s;
+            opacity: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background-color: #1C111Fff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        #result.show {
+            opacity: 1;
+        }
+
+        audio {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #337995ff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background-color: #28B6E3ff;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            background-color: #337995ff;
+            transform: scale(1);
+        }
+
+        .btn::before {
+            content: '\f093';
+            font-family: 'Font Awesome', Arial, sans-serif;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover::before {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #9C8979ff;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0;
+            background-color: #337995ff;
+            transition: width 0.3s;
+        }
+
+        .result-label {
+            padding: 10px;
+            background-color: #337995ff;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            transition: opacity 0.3s;
+            opacity: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-label.show {
+            opacity: 1;
+        }
+
+        .sound-classification {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media screen and (min-width: 768px) {
+            .sound-classification {
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+            #drop-area,
+            .progress-bar,
+            .result-label {
+                margin-right: 20px;
+            }
+        }
+
+        .hover-effect {
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .hover-effect:hover {
+            background-color: #26234Dff;
+            transform: scale(1.05);
+        }
+
+        .loader {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #28B6E3ff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            margin-bottom: 10px;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Audio Classification</h1>
+    <div id="drop-area" class="hover-effect">
+        <h2>Drag and Drop Sound Clips</h2>
+        <p>Or</p>
+        <input type="file" id="file-input" accept="audio/*">
+        <div class="loader"></div>
+    </div>
+    <div class="sound-classification">
+        <div class="progress-bar">
+            <div class="progress-bar-fill"></div>
+        </div>
+        <div id="result" class="result-label"></div>
+    </div>
+    <audio id="audio" controls></audio>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function handleFile(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            $.ajax({
+                url: '/predict',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener('progress', function(e) {
+                        if (e.lengthComputable) {
+                            var progressPercent = (e.loaded / e.total) * 100;
+                            $('.progress-bar-fill').css('width', progressPercent + '%');
+                        }
+                    });
+                    return xhr;
+                },
+                beforeSend: function() {
+                    $('#drop-area .loader').addClass('loading');
+                },
+                success: function(data) {
+                    $('#result').text('Predicted Class: ' + data).addClass('show');
+
+                    // Play the uploaded audio
+                    var audioElement = document.getElementById('audio');
+                    audioElement.src = URL.createObjectURL(file);
+                    audioElement.load();
+                    audioElement.play();
+                },
+                complete: function() {
+                    $('#drop-area .loader').removeClass('loading');
+                }
+            });
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            var file = e.dataTransfer.files[0];
+            handleFile(file);
+        }
+
+        function handleFileInput(e) {
+            var file = e.target.files[0];
+            handleFile(file);
+        }
+
+        $(document).ready(function() {
+            var dropArea = document.getElementById('drop-area');
+            dropArea.addEventListener('dragenter', function(e) {
+                e.preventDefault();
+                dropArea.classList.add('dragover');
+            });
+
+            dropArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                dropArea.classList.remove('dragover');
+            });
+
+            dropArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+            });
+
+            dropArea.addEventListener('drop', handleDrop);
+
+            var fileInput = document.getElementById('file-input');
+            fileInput.addEventListener('change', handleFileInput);
+        });
+    </script>
+</body>
+</html>
