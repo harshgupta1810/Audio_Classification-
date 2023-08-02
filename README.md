@@ -74,32 +74,28 @@ Audio Classification using MFCC and Neural Networks
 
 ## Project Demo
 
-_Replace this section with a link or instructions on how to access the live demo of your project._
+### video Demo
+![demo](result)
+### frontend photos 
+![f](f.png)
+![f1](f1.png)
 
 
 ## Installation
 
 1. Clone the repository to your local machine.
 ```bash
-git clone <repository_url>
-```
-
-2. Install the required Python packages.
-```bash
-pip install -r requirements.txt
+git clone <https://github.com/harshgupta1810/Audio_Classification>
 ```
 
 ## Usage
 
 1. Download the UrbanSound8K dataset from Kaggle using the provided command.
 
-2. Run the Jupyter notebook `audio_classification.ipynb` to preprocess the audio data, extract MFCC features, create and train the neural network model.
+2. Run the Jupyter notebook `audio_classification.ipynb` to preprocess the audio data, extract MFCC features, and create and train the neural network model.
 
-3. To use the trained model for prediction, load the saved model and pass an audio file through it. An example for doing this is given in the last section of the Jupyter notebook.
+3. To use the trained model for prediction, load the saved model and pass an audio file through it. An example of doing this is given in the last section of the Jupyter Notebook.
 
-## Configuration
-
-_No specific configuration is required for this project._
 
 ## Contributing
 
@@ -116,7 +112,7 @@ _This project is licensed under the [MIT License](LICENSE)._
 
 ## Acknowledgments
 
-_Include any credits or acknowledgments you want to give to others or resources you have used._
+_Include any credits or acknowledgements you want to give to others or resources you have used._
 
 ## Documentation
 
