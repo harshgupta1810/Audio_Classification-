@@ -1,6 +1,6 @@
-# Audio Classification using MFCC and Neural Networks
+# Audio Alchemy: Audio Classification using MFCC and Neural Networks
 
-This project is an implementation of audio classification using Mel-Frequency Cepstral Coefficients (MFCC) and Neural Networks. The code provided here is the first part of the project, which includes data preprocessing, feature extraction, model creation, and training.
+This project is an implementation of audio classification using Mel-Frequency Cepstral Coefficients (MFCC) and Neural Networks. Uncover impressive performance metrics and practical real-world applications of our audio classification project.
 
 ## Dataset Description
 
@@ -22,10 +22,7 @@ kaggle datasets download -d chrisfilo/urbansound8k
 6. [Installation](#installation)
 7. [Usage](#usage)
 8. [Configuration](#configuration)
-9. [Contributing](#contributing)
-10. [License](#license)
-11. [Acknowledgments](#acknowledgments)
-12. [Documentation](#documentation)
+9. [Contributing](#contributing))
 
 # Frontend for Audio Classification
 
@@ -106,17 +103,6 @@ _If you wish to contribute to this project, please follow the guidelines below:_
 4. Push your changes to your forked repository.
 5. Create a pull request to the original repository.
 
-## License
-
-_This project is licensed under the [MIT License](LICENSE)._
-
-## Acknowledgments
-
-_Include any credits or acknowledgements you want to give to others or resources you have used._
-
-## Documentation
-
-_Replace this section with detailed documentation for the project. You can include information on how to use the code, the meaning of different functions, explanations of the concepts used (such as MFCC), and any other relevant information to help beginners understand the code._
 
 ---
 
