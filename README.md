@@ -67,7 +67,7 @@ _Frontend code designed and developed by Harsh Gupta (Desperate Enuf)._
 
 ## Project Name
 
-Audio Classification using MFCC and Neural Networks
+Audio Alchemy : Audio Classification using MFCC and Neural Networks
 
 ## Project Demo
 
